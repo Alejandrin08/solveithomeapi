@@ -2,6 +2,7 @@ package com.fei.foodTrackerApi.service.implementations;
 
 import com.fei.foodTrackerApi.config.JwtUtil;
 import com.fei.foodTrackerApi.dto.AccountDTO;
+import com.fei.foodTrackerApi.dto.AccountTypes;
 import com.fei.foodTrackerApi.dto.CustomUserDetails;
 import com.fei.foodTrackerApi.model.Account;
 import com.fei.foodTrackerApi.repository.AccountRepository;
@@ -24,13 +25,16 @@ public class AccountService implements IAccount {
     private final ModelMapper modelMapper;
 
     @Override
+    @Transactional
     public AccountDTO createAccount(AccountDTO accountDTO) {
         Account account = new Account();
         account.setEmail(accountDTO.getEmail());
         account.setPassword(passwordEncoder.encode(accountDTO.getPassword()));
         account.setAccountType(accountDTO.getAccountType().toString());
         accountRepository.save(account);
-        return modelMapper.map(account, AccountDTO.class);
+        AccountDTO response = modelMapper.map(account, AccountDTO.class);
+        response.setPassword(null);
+        return response;
     }
 
     @Override
@@ -53,24 +57,47 @@ public class AccountService implements IAccount {
     }
 
     @Override
-    @Transactional
-    public AccountDTO modifyAccount(Integer id, AccountDTO accountDTO) {
+    public AccountDTO getAccount(Integer id) {
         Optional<Account> accountOptional = accountRepository.findById(id);
-        if (accountOptional.isPresent()) {
-            Account account = accountOptional.get();
 
-            if (accountRepository.existsByEmail(accountDTO.getEmail()) && !account.getEmail().equals(accountDTO.getEmail())) {
-                throw new RuntimeException("Email already in use");
-            }
-
-            account.setEmail(accountDTO.getEmail());
-            String encodedPassword = passwordEncoder.encode(accountDTO.getPassword());
-            account.setPassword(encodedPassword);
-            accountRepository.save(account);
-
-            return modelMapper.map(account, AccountDTO.class);
-        } else {
+        if (accountOptional.isEmpty()) {
             throw new RuntimeException("Account not found");
         }
+
+        Account account = accountOptional.get();
+        AccountDTO accountDTO = new AccountDTO();
+        accountDTO.setId(account.getId());
+        accountDTO.setEmail(account.getEmail());
+        accountDTO.setPassword(null);
+        accountDTO.setAccountType(AccountTypes.valueOf(account.getAccountType()));
+        return accountDTO;
+    }
+
+    @Override
+    @Transactional
+    public AccountDTO updateAccount(Integer id, AccountDTO accountDTO) {
+        Optional<Account> accountOptional = accountRepository.findById(id);
+        if (accountOptional.isEmpty()) {
+            throw new RuntimeException("Account not found");
+        }
+
+        Account account = accountOptional.get();
+
+        if (!account.getEmail().equals(accountDTO.getEmail()) && accountRepository.existsByEmail(accountDTO.getEmail())) {
+            throw new RuntimeException("Email already in use");
+        }
+
+        account.setEmail(accountDTO.getEmail());
+
+        if (accountDTO.getPassword() != null && !accountDTO.getPassword().isEmpty()) {
+            account.setPassword(passwordEncoder.encode(accountDTO.getPassword()));
+        }
+
+        accountRepository.save(account);
+
+        accountDTO.setId(account.getId());
+        accountDTO.setPassword(null);
+        accountDTO.setAccountType(AccountTypes.valueOf(account.getAccountType()));
+        return accountDTO;
     }
 }
