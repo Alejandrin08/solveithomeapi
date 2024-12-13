@@ -12,7 +12,9 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "Category", schema = "foodtracker")
+@Table(name = "Category", schema = "foodtracker", uniqueConstraints = {
+        @UniqueConstraint(name = "name", columnNames = {"name"})
+})
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +27,9 @@ public class Category {
     private String name;
 
     @OneToMany(mappedBy = "category")
-    private Set<Restaurant> restaurants = new LinkedHashSet<>();
+    private Set<com.fei.foodTrackerApi.model.Menu> menus = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "category")
+    private Set<com.fei.foodTrackerApi.model.Restaurant> restaurants = new LinkedHashSet<>();
 
 }

@@ -23,6 +23,8 @@ public class CustomUserDetails implements UserDetails {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + account.getAccountType()));
     }
 
+    public Integer getId() { return account.getId(); }
+
     @Override
     public String getPassword() {
         return account.getPassword();
