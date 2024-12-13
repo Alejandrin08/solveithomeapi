@@ -3,6 +3,7 @@ package com.fei.foodTrackerApi.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -33,8 +34,10 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/api/account/login", "/api/account/register").permitAll()
-                                .requestMatchers("/api/account/modifyAccount/**").hasRole("CLIENT")
+                                .requestMatchers("/api/account/**", "/api").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/client/{id}").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/client/**").hasRole("CLIENT")
+                                .requestMatchers(HttpMethod.PUT, "/api/client/**").hasRole("CLIENT")
                                 .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider)

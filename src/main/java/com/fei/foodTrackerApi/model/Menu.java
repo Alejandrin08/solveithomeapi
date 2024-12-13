@@ -1,6 +1,7 @@
 package com.fei.foodTrackerApi.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,8 +14,9 @@ import java.math.BigDecimal;
 @Setter
 @Entity
 @Table(name = "Menu", schema = "foodtracker", indexes = {
-        @Index(name = "restaurant_id", columnList = "restaurant_id"),
-        @Index(name = "category_dish", columnList = "category_dish")
+        @Index(name = "category_id", columnList = "category_id")
+}, uniqueConstraints = {
+        @UniqueConstraint(name = "restaurant_id", columnNames = {"restaurant_id", "dish"})
 })
 public class Menu {
     @Id
@@ -22,21 +24,27 @@ public class Menu {
     @Column(name = "menu_id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "restaurant_id")
-    private Restaurant restaurant;
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    private com.fei.foodTrackerApi.model.Restaurant restaurant;
 
     @Size(max = 255)
-    @Column(name = "dish")
+    @NotNull
+    @Column(name = "dish", nullable = false)
     private String dish;
 
-    @Column(name = "price", precision = 10, scale = 2)
+    @NotNull
+    @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "category_dish")
-    private DishCategory categoryDish;
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @Lob
+    @Column(name = "image_url")
+    private String imageUrl;
 
 }

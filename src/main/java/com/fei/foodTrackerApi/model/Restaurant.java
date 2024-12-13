@@ -19,7 +19,10 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "Restaurant", schema = "foodtracker", indexes = {
+        @Index(name = "account_id", columnList = "account_id"),
         @Index(name = "category_id", columnList = "category_id")
+}, uniqueConstraints = {
+        @UniqueConstraint(name = "restaurant_name", columnNames = {"restaurant_name", "location"})
 })
 public class Restaurant {
     @Id
@@ -27,13 +30,18 @@ public class Restaurant {
     @Column(name = "restaurant_id", nullable = false)
     private Integer id;
 
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
+
     @Size(max = 255)
     @NotNull
     @Column(name = "restaurant_name", nullable = false)
     private String restaurantName;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "category_id")
     private Category category;
 
@@ -41,8 +49,8 @@ public class Restaurant {
     @JdbcTypeCode(SqlTypes.JSON)
     private Map<String, Object> schedule;
 
-    @Size(max = 100)
-    @Column(name = "phone_number_restaurant", length = 100)
+    @Size(max = 15)
+    @Column(name = "phone_number_restaurant", length = 15)
     private String phoneNumberRestaurant;
 
     @Column(name = "service_price", precision = 10, scale = 2)
@@ -51,13 +59,18 @@ public class Restaurant {
     @Column(name = "delivery_price", precision = 10, scale = 2)
     private BigDecimal deliveryPrice;
 
-    @Lob
-    @Column(name = "location")
+    @Size(max = 500)
+    @Column(name = "location", length = 500)
     private String location;
+
+    @Lob
+    @Column(name = "image_url")
+    private String imageUrl;
 
     @OneToMany(mappedBy = "restaurant")
     private Set<Menu> menus = new LinkedHashSet<>();
 
-    @OneToOne(mappedBy = "restaurant")
-    private Rating rating;
+    @OneToMany(mappedBy = "restaurant")
+    private Set<Rating> ratings = new LinkedHashSet<>();
+
 }
