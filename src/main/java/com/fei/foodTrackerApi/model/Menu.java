@@ -13,9 +13,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
-@Table(name = "Menu", schema = "foodtracker", indexes = {
-        @Index(name = "category_id", columnList = "category_id")
-}, uniqueConstraints = {
+@Table(name = "Menu", schema = "foodtracker", uniqueConstraints = {
         @UniqueConstraint(name = "restaurant_id", columnNames = {"restaurant_id", "dish"})
 })
 public class Menu {
@@ -38,10 +36,6 @@ public class Menu {
     @NotNull
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
 
     @Lob
     @Column(name = "image_url")
