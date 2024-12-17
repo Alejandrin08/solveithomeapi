@@ -19,8 +19,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "Restaurant", schema = "foodtracker", indexes = {
-        @Index(name = "account_id", columnList = "account_id"),
-        @Index(name = "category_id", columnList = "category_id")
+        @Index(name = "account_id", columnList = "account_id")
 }, uniqueConstraints = {
         @UniqueConstraint(name = "restaurant_name", columnNames = {"restaurant_name", "location"})
 })
@@ -38,26 +37,21 @@ public class Restaurant {
 
     @Size(max = 255)
     @NotNull
+    @Column(name = "category_name", nullable = false)
+    private String categoryName;
+
+    @Size(max = 255)
+    @NotNull
     @Column(name = "restaurant_name", nullable = false)
     private String restaurantName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
-
     @Column(name = "schedule")
     @JdbcTypeCode(SqlTypes.JSON)
-    private Map<String, Object> schedule;
+    private Map<String, String> schedule;
 
     @Size(max = 15)
     @Column(name = "phone_number_restaurant", length = 15)
     private String phoneNumberRestaurant;
-
-    @Column(name = "service_price", precision = 10, scale = 2)
-    private BigDecimal servicePrice;
-
-    @Column(name = "delivery_price", precision = 10, scale = 2)
-    private BigDecimal deliveryPrice;
 
     @Size(max = 500)
     @Column(name = "location", length = 500)
@@ -66,6 +60,9 @@ public class Restaurant {
     @Lob
     @Column(name = "image_url")
     private String imageUrl;
+
+    @Column(name = "average_rating", precision = 3, scale = 2)
+    private BigDecimal averageRating;
 
     @OneToMany(mappedBy = "restaurant")
     private Set<Menu> menus = new LinkedHashSet<>();

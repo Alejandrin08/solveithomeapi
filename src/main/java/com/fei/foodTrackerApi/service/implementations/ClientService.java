@@ -1,5 +1,6 @@
 package com.fei.foodTrackerApi.service.implementations;
 
+import com.fei.foodTrackerApi.dto.AccountTypes;
 import com.fei.foodTrackerApi.dto.ClientDTO;
 import com.fei.foodTrackerApi.model.Account;
 import com.fei.foodTrackerApi.model.Client;
@@ -23,10 +24,21 @@ public class ClientService implements IClient {
 
     @Override
     @Transactional
-    public ClientDTO registerClient(Integer id, ClientDTO clientDTO) {
+    public ClientDTO createClient(Integer id, ClientDTO clientDTO) {
         Optional<Account> accountOptional = accountRepository.findById(id);
         if (accountOptional.isEmpty()) {
             throw new RuntimeException("Account not found");
+        }
+
+        Account account = accountOptional.get();
+
+        String accountType = AccountTypes.CLIENT.toString();
+        if (!accountType.equals(account.getAccountType())) {
+            throw new RuntimeException("Account must be of type client");
+        }
+
+        if (clientRepository.existsByAccountId(account.getId())) {
+            throw new RuntimeException("A client is already associated with this account");
         }
 
         Client client = new Client();

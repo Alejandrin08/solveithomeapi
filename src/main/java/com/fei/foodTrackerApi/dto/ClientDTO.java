@@ -10,7 +10,7 @@ public class ClientDTO {
     private String name;
 
     @NotBlank
-    @Digits(integer = 10, fraction = 0)
+    @Pattern(regexp = "^\\d{10}$")
     private String phone;
 
     @NotBlank

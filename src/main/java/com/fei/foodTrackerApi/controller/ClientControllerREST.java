@@ -31,7 +31,7 @@ public class ClientControllerREST {
 
     @PostMapping("/{id}")
     public ResponseEntity<ClientDTO> createClient(@PathVariable @Valid Integer id, @RequestBody @Valid ClientDTO clientDTO) {
-        ClientDTO client = clientService.registerClient(id, clientDTO);
+        ClientDTO client = clientService.createClient(id, clientDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(client);
     }
 
