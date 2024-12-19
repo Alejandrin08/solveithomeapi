@@ -1,13 +1,13 @@
-package com.fei.solvethomeapi;
+package com.fei.foodTrackerApi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SolvethomeapiApplication {
+public class FoodTrackerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SolvethomeapiApplication.class, args);
+        SpringApplication.run(FoodTrackerApplication.class, args);
     }
 
 }

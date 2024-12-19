@@ -1,10 +1,10 @@
-package com.fei.solvethomeapi;
+package com.fei.foodTrackerApi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SolvethomeapiApplicationTests {
+class FoodTrackerApplicationTests {
 
     @Test
     void contextLoads() {
