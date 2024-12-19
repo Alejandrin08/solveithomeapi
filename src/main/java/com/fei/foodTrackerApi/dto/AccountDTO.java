@@ -14,7 +14,7 @@ public class AccountDTO {
     @NotEmpty
     private String email;
 
-    @Pattern(regexp = "^(?!\\s*$)(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{5,}$")
+    @Pattern(regexp = "/^((?=\\S*?[A-Z])(?=\\S*?[a-z])(?=\\S*?[0-9]).{6,})\\S$/")
     private String password;
 
     @Enumerated(EnumType.STRING)
