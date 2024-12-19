@@ -13,9 +13,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
-@Table(name = "Menu", schema = "foodtracker", indexes = {
-        @Index(name = "category_id", columnList = "category_id")
-}, uniqueConstraints = {
+@Table(name = "Menu", schema = "foodtracker", uniqueConstraints = {
         @UniqueConstraint(name = "restaurant_id", columnNames = {"restaurant_id", "dish"})
 })
 public class Menu {
@@ -28,7 +26,7 @@ public class Menu {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "restaurant_id", nullable = false)
-    private com.fei.foodTrackerApi.model.Restaurant restaurant;
+    private Restaurant restaurant;
 
     @Size(max = 255)
     @NotNull
@@ -39,12 +37,11 @@ public class Menu {
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
-
     @Lob
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Size(max = 255)
+    @Column(name = "description")
+    private String description;
 }

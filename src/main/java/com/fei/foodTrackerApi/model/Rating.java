@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Entity
@@ -22,15 +24,15 @@ public class Rating {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "restaurant_id", nullable = false)
-    private com.fei.foodTrackerApi.model.Restaurant restaurant;
+    private Restaurant restaurant;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
-    @Column(name = "rate")
-    private Integer rate;
+    @Column(name = "rate", precision = 3, scale = 2)
+    private BigDecimal rate;
 
     @Lob
     @Column(name = "comment")
