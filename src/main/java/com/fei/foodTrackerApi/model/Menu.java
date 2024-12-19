@@ -26,7 +26,7 @@ public class Menu {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "restaurant_id", nullable = false)
-    private com.fei.foodTrackerApi.model.Restaurant restaurant;
+    private Restaurant restaurant;
 
     @Size(max = 255)
     @NotNull
@@ -41,4 +41,7 @@ public class Menu {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Size(max = 255)
+    @Column(name = "description")
+    private String description;
 }
