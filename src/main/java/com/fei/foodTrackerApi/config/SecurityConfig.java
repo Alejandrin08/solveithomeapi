@@ -45,6 +45,8 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST, "/api/menu/").hasRole("OWNER")
                                 .requestMatchers(HttpMethod.PUT,"/api/menu/{dish}").hasRole("OWNER")
                                 .requestMatchers(HttpMethod.DELETE,"/api/menu/{dish}").hasRole("OWNER")
+                                .requestMatchers(HttpMethod.POST, "/api/rating/{restaurantName}").hasRole("CLIENT")
+                                .requestMatchers(HttpMethod.GET,"/api/rating/{restaurantName}").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider)

@@ -14,4 +14,5 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
     boolean existsByAccount(Account account);
     Optional<Restaurant> getRestaurantByAccount(Account account);
     List<Restaurant> getAllRestaurantsByCategoryName(String categoryName);
+    Optional<Restaurant> getRestaurantByRestaurantName(String restaurantName);
 }
