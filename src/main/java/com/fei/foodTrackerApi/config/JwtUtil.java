@@ -2,6 +2,7 @@ package com.fei.foodTrackerApi.config;
 
 import com.fei.foodTrackerApi.dto.CustomUserDetails;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -37,15 +38,19 @@ public class JwtUtil {
     public String generateToken(UserDetails userDetails) {
         CustomUserDetails customUserDetails = (CustomUserDetails) userDetails;
 
-        return Jwts.builder()
+        JwtBuilder tokenBuilder = Jwts.builder()
                 .setSubject(customUserDetails.getAccount().getEmail())
                 .claim("roles", "ROLE_" + customUserDetails.getAccountType())
                 .claim("userId", customUserDetails.getAccount().getId())
-                .claim("username", customUserDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-                .compact();
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256);
+
+        if ("CLIENT".equals(customUserDetails.getAccountType())) {
+            tokenBuilder.claim("username", customUserDetails.getUsername());
+        }
+
+        return tokenBuilder.compact();
     }
 
     public Integer getAuthenticatedUserId() {
