@@ -38,19 +38,15 @@ public class JwtUtil {
     public String generateToken(UserDetails userDetails) {
         CustomUserDetails customUserDetails = (CustomUserDetails) userDetails;
 
-        JwtBuilder tokenBuilder = Jwts.builder()
+        return Jwts.builder()
                 .setSubject(customUserDetails.getAccount().getEmail())
                 .claim("roles", "ROLE_" + customUserDetails.getAccountType())
                 .claim("userId", customUserDetails.getAccount().getId())
+                .claim("username", customUserDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256);
-
-        if ("CLIENT".equals(customUserDetails.getAccountType())) {
-            tokenBuilder.claim("username", customUserDetails.getUsername());
-        }
-
-        return tokenBuilder.compact();
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
     public Integer getAuthenticatedUserId() {

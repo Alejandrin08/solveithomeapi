@@ -49,14 +49,18 @@ public class AccountControllerREST {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AccountDTO> updateAccount(@PathVariable @Valid Integer id, @RequestBody @Valid AccountDTO accountDTO) {
+    public ResponseEntity<Boolean> updateEmail(@PathVariable Integer id, @RequestBody @Valid String email) {
         Integer authenticatedUserId = jwtUtil.getAuthenticatedUserId();
 
         if (!id.equals(authenticatedUserId)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        AccountDTO account = accountService.updateAccount(id, accountDTO);
-        return new ResponseEntity<>(account, HttpStatus.OK);
+        try {
+            boolean isUpdated = accountService.updateEmail(id, email);
+            return new ResponseEntity<>(isUpdated, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

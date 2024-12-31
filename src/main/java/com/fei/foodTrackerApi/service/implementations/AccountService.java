@@ -75,7 +75,7 @@ public class AccountService implements IAccount {
 
     @Override
     @Transactional
-    public AccountDTO updateAccount(Integer id, AccountDTO accountDTO) {
+    public boolean updateEmail(Integer id, String email) {
         Optional<Account> accountOptional = accountRepository.findById(id);
         if (accountOptional.isEmpty()) {
             throw new RuntimeException("Account not found");
@@ -83,21 +83,33 @@ public class AccountService implements IAccount {
 
         Account account = accountOptional.get();
 
-        if (!account.getEmail().equals(accountDTO.getEmail()) && accountRepository.existsByEmail(accountDTO.getEmail())) {
+        if (!account.getEmail().equals(email) && accountRepository.existsByEmail(email)) {
             throw new RuntimeException("Email already in use");
         }
 
-        account.setEmail(accountDTO.getEmail());
-
-        if (accountDTO.getPassword() != null && !accountDTO.getPassword().isEmpty()) {
-            account.setPassword(passwordEncoder.encode(accountDTO.getPassword()));
-        }
-
+        account.setEmail(email);
         accountRepository.save(account);
 
-        accountDTO.setId(account.getId());
-        accountDTO.setPassword(null);
-        accountDTO.setAccountType(AccountTypes.valueOf(account.getAccountType()));
-        return accountDTO;
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public boolean updatePassword(Integer id, String newPassword) {
+        Optional<Account> accountOptional = accountRepository.findById(id);
+        if (accountOptional.isEmpty()) {
+            throw new RuntimeException("Account not found");
+        }
+
+        Account account = accountOptional.get();
+
+        if (passwordEncoder.matches(newPassword, account.getPassword())) {
+            throw new RuntimeException("The new password cannot be the same as the current password");
+        }
+
+        account.setPassword(passwordEncoder.encode(newPassword));
+        accountRepository.save(account);
+
+        return true;
     }
 }

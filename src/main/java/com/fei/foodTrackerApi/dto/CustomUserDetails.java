@@ -26,7 +26,9 @@ public class CustomUserDetails implements UserDetails {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + account.getAccountType()));
     }
 
-    public Integer getId() { return account.getId(); }
+    public Integer getId() {
+        return account.getId();
+    }
 
     @Override
     public String getPassword() {
@@ -35,13 +37,10 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        if ("CLIENT".equals(account.getAccountType())) {
-            return account.getClients().stream()
-                    .findFirst()
-                    .map(Client::getClientName)
-                    .orElse("N/A");
-        }
-        return account.getEmail();
+        return account.getClients().stream()
+                .findFirst()
+                .map(Client::getClientName)
+                .orElse("N/A");
     }
 
     public String getAccountType() {
