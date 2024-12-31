@@ -45,7 +45,6 @@ public class ClientService implements IClient {
         client.setAccount(accountOptional.get());
         client.setClientName(clientDTO.getName());
         client.setPhoneNumber(clientDTO.getPhone());
-        client.setLocationClient(clientDTO.getLocation());
         clientRepository.save(client);
 
         return modelMapper.map(client, ClientDTO.class);
@@ -73,7 +72,6 @@ public class ClientService implements IClient {
 
         client.setClientName(clientDTO.getName());
         client.setPhoneNumber(clientDTO.getPhone());
-        client.setLocationClient(clientDTO.getLocation());
         clientRepository.save(client);
 
         return modelMapper.map(client, ClientDTO.class);

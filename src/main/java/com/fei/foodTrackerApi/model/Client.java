@@ -37,11 +37,7 @@ public class Client {
     @Column(name = "phone_number", length = 15)
     private String phoneNumber;
 
-    @Lob
-    @Column(name = "location_client")
-    private String locationClient;
-
     @OneToMany(mappedBy = "client")
-    private Set<com.fei.foodTrackerApi.model.Rating> ratings = new LinkedHashSet<>();
+    private Set<Rating> ratings = new LinkedHashSet<>();
 
 }
