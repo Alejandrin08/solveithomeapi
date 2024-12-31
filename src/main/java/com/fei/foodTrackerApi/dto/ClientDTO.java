@@ -12,8 +12,4 @@ public class ClientDTO {
     @NotBlank
     @Pattern(regexp = "^\\d{10}$")
     private String phone;
-
-    @NotBlank
-    @Size(min = 2, max = 255)
-    private String location;
 }

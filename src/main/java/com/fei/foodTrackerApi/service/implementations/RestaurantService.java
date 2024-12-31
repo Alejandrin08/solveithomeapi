@@ -1,5 +1,6 @@
 package com.fei.foodTrackerApi.service.implementations;
 
+import com.fei.foodTrackerApi.dto.AccountTypes;
 import com.fei.foodTrackerApi.dto.RestaurantDTO;
 import com.fei.foodTrackerApi.model.Account;
 import com.fei.foodTrackerApi.model.Restaurant;
@@ -33,6 +34,13 @@ public class RestaurantService implements IRestaurant {
             throw new RuntimeException("This account already has a restaurant registered.");
         }
 
+        if (account.getAccountType().equals(AccountTypes.CLIENT.toString())) {
+            account.setAccountType(AccountTypes.OWNER.toString());
+            accountRepository.save(account);
+        } else {
+            throw new RuntimeException("This account does not have a restaurant registered.");
+        }
+
         Restaurant restaurant = new Restaurant();
         restaurant.setAccount(account);
         restaurant.setRestaurantName(restaurantDTO.getRestaurantName());
@@ -42,6 +50,7 @@ public class RestaurantService implements IRestaurant {
         restaurant.setCategoryName(restaurantDTO.getCategoryName());
         restaurant.setImageUrl(restaurantDTO.getImageUrl());
         restaurantRepository.save(restaurant);
+
         return modelMapper.map(restaurant, RestaurantDTO.class);
     }
 
