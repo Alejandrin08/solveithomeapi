@@ -63,18 +63,7 @@ public class RestaurantService implements IRestaurant {
         }
         return restaurantDTOList;
     }
-
-    @Override
-    public RestaurantDTO getRestaurant(Integer id) {
-        Optional<Restaurant> restaurant = restaurantRepository.findById(id);
-
-        if (restaurant.isEmpty()) {
-            throw new RuntimeException("Restaurant not found");
-        }
-
-        return modelMapper.map(restaurant.get(), RestaurantDTO.class);
-    }
-
+    
     @Override
     @Transactional
     public RestaurantDTO updateRestaurant(Integer id, RestaurantDTO restaurantDTO) {

@@ -35,6 +35,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/api/account/login").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/account/email/{email}").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/api/account/").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/account/").permitAll()
                                 .requestMatchers("/api/account/{id}").hasAnyRole("CLIENT", "OWNER")
                                 .requestMatchers(HttpMethod.POST, "/api/client/{id}").permitAll()
