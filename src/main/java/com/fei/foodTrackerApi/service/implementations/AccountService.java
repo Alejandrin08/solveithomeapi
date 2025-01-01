@@ -95,21 +95,20 @@ public class AccountService implements IAccount {
 
     @Override
     @Transactional
-    public boolean updatePassword(Integer id, String newPassword) {
-        Optional<Account> accountOptional = accountRepository.findById(id);
+    public boolean updatePassword(String email, String newPassword) {
+        Optional<Account> accountOptional = accountRepository.findByEmail(email);
         if (accountOptional.isEmpty()) {
             throw new RuntimeException("Account not found");
         }
-
         Account account = accountOptional.get();
-
-        if (passwordEncoder.matches(newPassword, account.getPassword())) {
-            throw new RuntimeException("The new password cannot be the same as the current password");
-        }
-
         account.setPassword(passwordEncoder.encode(newPassword));
         accountRepository.save(account);
-
         return true;
+    }
+
+    @Override
+    public boolean isEmailValid(String email) {
+        Optional<Account> accountOptional = accountRepository.findByEmail(email);
+        return accountOptional.isPresent();
     }
 }

@@ -7,5 +7,6 @@ public interface IAccount {
     String login(AccountDTO loginDTO);
     AccountDTO getAccount(Integer id);
     boolean updateEmail(Integer id, String email);
-    boolean updatePassword(Integer id, String password);
+    boolean updatePassword(String email, String password);
+    boolean isEmailValid(String email);
 }
