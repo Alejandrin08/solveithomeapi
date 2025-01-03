@@ -75,7 +75,7 @@ public class AccountService implements IAccount {
 
     @Override
     @Transactional
-    public boolean updateEmail(Integer id, String email) {
+    public String updateEmail(Integer id, String email) {
         Optional<Account> accountOptional = accountRepository.findById(id);
         if (accountOptional.isEmpty()) {
             throw new RuntimeException("Account not found");
@@ -90,7 +90,8 @@ public class AccountService implements IAccount {
         account.setEmail(email);
         accountRepository.save(account);
 
-        return true;
+        CustomUserDetails userDetails = new CustomUserDetails(account);
+        return jwtUtil.generateToken(userDetails);
     }
 
     @Override

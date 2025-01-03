@@ -3,6 +3,7 @@ package com.fei.foodTrackerApi.controller;
 import com.fei.foodTrackerApi.config.JwtUtil;
 import com.fei.foodTrackerApi.dto.AccountDTO;
 import com.fei.foodTrackerApi.dto.LoginResponseDTO;
+import com.fei.foodTrackerApi.dto.UpdateEmailDTO;
 import com.fei.foodTrackerApi.dto.UpdatePasswordDTO;
 import com.fei.foodTrackerApi.service.interfaces.IAccount;
 import jakarta.validation.Valid;
@@ -10,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/account")
@@ -70,7 +74,7 @@ public class AccountControllerREST {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Boolean> updateEmail(@PathVariable Integer id, @RequestBody @Valid String email) {
+    public ResponseEntity<Map<String, Object>> updateEmail(@PathVariable Integer id, @RequestBody @Valid UpdateEmailDTO request) {
         Integer authenticatedUserId = jwtUtil.getAuthenticatedUserId();
 
         if (!id.equals(authenticatedUserId)) {
@@ -78,8 +82,13 @@ public class AccountControllerREST {
         }
 
         try {
-            boolean isUpdated = accountService.updateEmail(id, email);
-            return new ResponseEntity<>(isUpdated, HttpStatus.OK);
+            String newToken = accountService.updateEmail(id, request.getEmail());
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("updated", true);
+            response.put("newToken", newToken);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
