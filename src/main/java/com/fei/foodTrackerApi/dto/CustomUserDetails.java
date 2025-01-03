@@ -37,6 +37,10 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
+        return account.getEmail();
+    }
+
+    public String getName() {
         return account.getClients().stream()
                 .findFirst()
                 .map(Client::getClientName)

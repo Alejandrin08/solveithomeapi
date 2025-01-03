@@ -42,7 +42,7 @@ public class JwtUtil {
                 .setSubject(customUserDetails.getAccount().getEmail())
                 .claim("roles", "ROLE_" + customUserDetails.getAccountType())
                 .claim("userId", customUserDetails.getAccount().getId())
-                .claim("username", customUserDetails.getUsername())
+                .claim("username", customUserDetails.getName())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
