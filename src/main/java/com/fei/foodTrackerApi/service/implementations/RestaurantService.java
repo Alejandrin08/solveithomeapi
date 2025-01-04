@@ -108,6 +108,12 @@ public class RestaurantService implements IRestaurant {
     }
 
     @Override
+    public RestaurantDTO getRestaurantById(Integer id) {
+            Optional<Restaurant> restaurant = restaurantRepository.findById(id);
+            return modelMapper.map(restaurant, RestaurantDTO.class);
+    }
+
+    @Override
     public List<RestaurantLocationDTO> getAllLocationRestaurants() {
         List<RestaurantLocationDTO> restaurantDTOList = new ArrayList<>();
         for (Restaurant restaurant : restaurantRepository.findAll()) {

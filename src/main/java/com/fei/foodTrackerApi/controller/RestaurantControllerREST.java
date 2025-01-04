@@ -46,6 +46,12 @@ public class RestaurantControllerREST {
         return new ResponseEntity<>(restaurants, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<RestaurantDTO> getRestaurant(@PathVariable @Valid Integer id) {
+        RestaurantDTO restaurant = restaurantService.getRestaurantById(id);
+        return new ResponseEntity<>(restaurant, HttpStatus.OK);
+    }
+
     @PutMapping("/")
     public ResponseEntity<RestaurantDTO> updateRestaurant(@RequestBody @Valid RestaurantDTO restaurantDTO) {
         Integer id = jwtUtil.getAuthenticatedUserId();
