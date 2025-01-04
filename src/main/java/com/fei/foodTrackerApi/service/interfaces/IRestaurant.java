@@ -10,4 +10,5 @@ public interface IRestaurant {
     List<RestaurantDTO> getAllRestaurants();
     RestaurantDTO updateRestaurant(Integer id, RestaurantDTO restaurantDTO);
     List<RestaurantDTO> getAllRestaurantsByCategory(String category);
+    RestaurantDTO getRestaurantById(Integer id);
 }

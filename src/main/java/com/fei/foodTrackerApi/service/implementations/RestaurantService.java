@@ -96,4 +96,10 @@ public class RestaurantService implements IRestaurant {
         }
         return restaurantDTOList;
     }
+
+    @Override
+    public RestaurantDTO getRestaurantById(Integer id) {
+            Optional<Restaurant> restaurant = restaurantRepository.findById(id);
+            return modelMapper.map(restaurant, RestaurantDTO.class);
+    }
 }
