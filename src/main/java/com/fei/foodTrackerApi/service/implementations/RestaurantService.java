@@ -1,6 +1,8 @@
 package com.fei.foodTrackerApi.service.implementations;
 
+import com.fei.foodTrackerApi.config.JwtUtil;
 import com.fei.foodTrackerApi.dto.AccountTypes;
+import com.fei.foodTrackerApi.dto.CustomUserDetails;
 import com.fei.foodTrackerApi.dto.RestaurantDTO;
 import com.fei.foodTrackerApi.model.Account;
 import com.fei.foodTrackerApi.model.Restaurant;
@@ -12,9 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -23,10 +23,11 @@ public class RestaurantService implements IRestaurant {
     private final RestaurantRepository restaurantRepository;
     private final AccountRepository accountRepository;
     private final ModelMapper modelMapper;
+    private final JwtUtil jwtUtil;
 
     @Override
     @Transactional
-    public RestaurantDTO createRestaurant(Integer id, RestaurantDTO restaurantDTO) {
+    public Map<String, Object> createRestaurant(Integer id, RestaurantDTO restaurantDTO) {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
@@ -37,8 +38,8 @@ public class RestaurantService implements IRestaurant {
         if (account.getAccountType().equals(AccountTypes.CLIENT.toString())) {
             account.setAccountType(AccountTypes.OWNER.toString());
             accountRepository.save(account);
-        } else {
-            throw new RuntimeException("This account does not have a restaurant registered.");
+        } else if (!account.getAccountType().equals(AccountTypes.OWNER.toString())) {
+            throw new RuntimeException("This account type cannot register a restaurant.");
         }
 
         Restaurant restaurant = new Restaurant();
@@ -51,7 +52,15 @@ public class RestaurantService implements IRestaurant {
         restaurant.setImageUrl(restaurantDTO.getImageUrl());
         restaurantRepository.save(restaurant);
 
-        return modelMapper.map(restaurant, RestaurantDTO.class);
+        CustomUserDetails userDetails = new CustomUserDetails(account);
+        String newToken = jwtUtil.generateToken(userDetails);
+
+        RestaurantDTO savedRestaurant = modelMapper.map(restaurant, RestaurantDTO.class);
+        Map<String, Object> response = new HashMap<>();
+        response.put("restaurant", savedRestaurant);
+        response.put("newToken", newToken);
+
+        return response;
     }
 
     @Override
@@ -63,7 +72,7 @@ public class RestaurantService implements IRestaurant {
         }
         return restaurantDTOList;
     }
-    
+
     @Override
     @Transactional
     public RestaurantDTO updateRestaurant(Integer id, RestaurantDTO restaurantDTO) {

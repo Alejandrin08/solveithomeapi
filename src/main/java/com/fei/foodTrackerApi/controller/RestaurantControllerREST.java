@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/restaurant")
@@ -20,12 +21,15 @@ public class RestaurantControllerREST {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/")
-    public ResponseEntity<RestaurantDTO> createRestaurant(@RequestBody @Valid RestaurantDTO restaurantDTO) {
+    public ResponseEntity<Map<String, Object>> createRestaurant(@RequestBody @Valid RestaurantDTO restaurantDTO) {
         Integer id = jwtUtil.getAuthenticatedUserId();
-        RestaurantDTO restaurant = restaurantService.createRestaurant(id, restaurantDTO);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(restaurant);
+
+        try {
+            Map<String, Object> response = restaurantService.createRestaurant(id, restaurantDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/")
