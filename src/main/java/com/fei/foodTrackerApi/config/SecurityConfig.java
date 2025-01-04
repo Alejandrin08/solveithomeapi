@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/api/account/login").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/restaurant/location").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/account/email/{email}").permitAll()
                                 .requestMatchers(HttpMethod.PUT, "/api/account/").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/account/").permitAll()
@@ -47,7 +48,6 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/client/**").hasAnyRole("CLIENT", "OWNER")
                                 .requestMatchers(HttpMethod.PUT, "/api/client/**").hasAnyRole("CLIENT", "OWNER")
                                 .requestMatchers("/api/restaurant/**").hasRole("OWNER")
-                                .requestMatchers("/api/restaurant/location").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/menu/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/menu/").hasRole("OWNER")
                                 .requestMatchers(HttpMethod.PUT, "/api/menu/{dish}").hasRole("OWNER")
