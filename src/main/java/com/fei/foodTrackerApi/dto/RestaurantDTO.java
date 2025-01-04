@@ -9,6 +9,8 @@ import java.util.Map;
 @Data
 public class RestaurantDTO {
 
+    private Integer id;
+
     @NotBlank
     private String restaurantName;
 

@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface MenuRepository extends JpaRepository<Menu, Integer> {
-    @Query("SELECT new com.fei.foodTrackerApi.dto.MenuDTO(m.dish, m.price, m.imageUrl, m.description) " +
+    @Query("SELECT new com.fei.foodTrackerApi.dto.MenuDTO(m.id, m.dish, m.price, m.imageUrl, m.description) " +
             "FROM Menu m JOIN m.restaurant r " +
             "WHERE r.restaurantName = :restaurantName AND m.dish = :dish")
     Optional<MenuDTO> getMenuDishByRestaurant(@Param("restaurantName") String restaurantName,
