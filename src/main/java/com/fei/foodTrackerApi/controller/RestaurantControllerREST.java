@@ -2,6 +2,7 @@ package com.fei.foodTrackerApi.controller;
 
 import com.fei.foodTrackerApi.config.JwtUtil;
 import com.fei.foodTrackerApi.dto.RestaurantDTO;
+import com.fei.foodTrackerApi.dto.RestaurantLocationDTO;
 import com.fei.foodTrackerApi.service.interfaces.IRestaurant;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -50,5 +51,12 @@ public class RestaurantControllerREST {
         Integer id = jwtUtil.getAuthenticatedUserId();
         RestaurantDTO restaurant = restaurantService.updateRestaurant(id, restaurantDTO);
         return new ResponseEntity<>(restaurant, HttpStatus.OK);
+    }
+
+    @GetMapping("/location")
+    public ResponseEntity<List<RestaurantLocationDTO>> getRestaurantLocations() {
+        List<RestaurantLocationDTO> restaurantLocations;
+        restaurantLocations = restaurantService.getAllLocationRestaurants();
+        return new ResponseEntity<>(restaurantLocations, HttpStatus.OK);
     }
 }

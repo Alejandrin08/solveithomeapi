@@ -4,6 +4,7 @@ import com.fei.foodTrackerApi.config.JwtUtil;
 import com.fei.foodTrackerApi.dto.AccountTypes;
 import com.fei.foodTrackerApi.dto.CustomUserDetails;
 import com.fei.foodTrackerApi.dto.RestaurantDTO;
+import com.fei.foodTrackerApi.dto.RestaurantLocationDTO;
 import com.fei.foodTrackerApi.model.Account;
 import com.fei.foodTrackerApi.model.Restaurant;
 import com.fei.foodTrackerApi.repository.AccountRepository;
@@ -102,6 +103,17 @@ public class RestaurantService implements IRestaurant {
         for (Restaurant restaurant : restaurantRepository.getAllRestaurantsByCategoryName(category)) {
             RestaurantDTO restaurantDTO = modelMapper.map(restaurant, RestaurantDTO.class);
             restaurantDTOList.add(restaurantDTO);
+        }
+        return restaurantDTOList;
+    }
+
+    @Override
+    public List<RestaurantLocationDTO> getAllLocationRestaurants() {
+        List<RestaurantLocationDTO> restaurantDTOList = new ArrayList<>();
+        for (Restaurant restaurant : restaurantRepository.findAll()) {
+            RestaurantLocationDTO RestaurantLocationDTO = modelMapper.map(restaurant, RestaurantLocationDTO.class);
+            RestaurantLocationDTO.setLocation(restaurant.getLocation());
+            restaurantDTOList.add(RestaurantLocationDTO);
         }
         return restaurantDTOList;
     }
