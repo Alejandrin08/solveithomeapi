@@ -13,6 +13,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class MenuDTO {
 
+    private Integer id;
+
     @NotBlank
     private String dish;
 
