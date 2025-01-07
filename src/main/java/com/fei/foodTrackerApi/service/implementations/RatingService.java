@@ -44,10 +44,6 @@ public class RatingService implements IRating {
         Client client = clientOptional.get();
         Restaurant restaurant = restaurantOptional.get();
 
-        boolean alreadyRated = ratingRepository.existsByClientAndRestaurant(client, restaurant);
-        if (alreadyRated) {
-            throw new RuntimeException("Client has already rated this restaurant");
-        }
 
         Rating rating = new Rating();
         rating.setClient(client);
