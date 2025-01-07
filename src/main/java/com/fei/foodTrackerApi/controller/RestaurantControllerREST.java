@@ -65,4 +65,11 @@ public class RestaurantControllerREST {
         restaurantLocations = restaurantService.getAllLocationRestaurants();
         return new ResponseEntity<>(restaurantLocations, HttpStatus.OK);
     }
+
+    @GetMapping("/owner")
+    public ResponseEntity<RestaurantDTO> getRestaurantOwner() {
+        Integer id = jwtUtil.getAuthenticatedUserId();
+        RestaurantDTO restaurant = restaurantService.getRestaurantOwner(id);
+        return new ResponseEntity<>(restaurant, HttpStatus.OK);
+    }
 }
