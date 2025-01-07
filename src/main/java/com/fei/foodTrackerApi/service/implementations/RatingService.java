@@ -53,7 +53,6 @@ public class RatingService implements IRating {
         rating.setClient(client);
         rating.setRestaurant(restaurant);
         rating.setRate(ratingDTO.getRate());
-        rating.setComment(ratingDTO.getComment());
         ratingRepository.save(rating);
 
         updateRestaurantRating(restaurantName);
