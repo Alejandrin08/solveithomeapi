@@ -11,7 +11,6 @@ public class RestaurantDTO {
 
     private Integer id;
 
-    @NotBlank
     private String restaurantName;
 
     private Map<String, String> schedule;
@@ -26,7 +25,6 @@ public class RestaurantDTO {
     @NotBlank
     private String imageUrl;
 
-    @NotBlank
     private String categoryName;
 
     private double averageRating;

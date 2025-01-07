@@ -16,6 +16,4 @@ public class RatingDTO {
     @DecimalMax(value = "5.00", inclusive = true)
     @Digits(integer = 1, fraction = 2)
     private BigDecimal rate;
-
-    private String comment;
 }
