@@ -35,13 +35,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/api/account/login").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/restaurant/location").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/account/email/{email}").permitAll()
                                 .requestMatchers(HttpMethod.PUT, "/api/account/").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/account/").permitAll()
                                 .requestMatchers("/api/account/{id}").hasAnyRole("CLIENT", "OWNER")
                                 .requestMatchers(HttpMethod.POST, "/api/client/{id}").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/restaurant/").hasAnyRole("CLIENT", "OWNER")
+                                .requestMatchers(HttpMethod.GET, "/api/restaurant/{id}").hasAnyRole("CLIENT", "OWNER")
                                 .requestMatchers(HttpMethod.POST, "/api/restaurant/").hasRole("CLIENT")
+                                .requestMatchers("/api/restaurant/owner").hasRole("OWNER")
                                 .requestMatchers(HttpMethod.GET, "/api/restaurant/{categoryName}").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/client/**").hasAnyRole("CLIENT", "OWNER")
                                 .requestMatchers(HttpMethod.PUT, "/api/client/**").hasAnyRole("CLIENT", "OWNER")

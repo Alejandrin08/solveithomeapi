@@ -33,9 +33,4 @@ public class Rating {
 
     @Column(name = "rate", precision = 3, scale = 2)
     private BigDecimal rate;
-
-    @Lob
-    @Column(name = "comment")
-    private String comment;
-
 }
